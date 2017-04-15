@@ -65,15 +65,14 @@ void init_K64F(){
   lcd.normalMode();      // normal colour mode
   lcd.setBrightness(0.5); // put LED backlight on 50%
 
-  engine.init(sonic);
+  engine.init();
 
 }
 
 void renderLCD(){
 
   lcd.clear();
-  //lcd.printString("Hello, World!",0,0);
-  engine.draw(lcd);
+  engine.draw(lcd, Maps);
   lcd.refresh();
 }
 

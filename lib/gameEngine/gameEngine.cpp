@@ -3,8 +3,6 @@
 
 Serial serial2(USBTX, USBRX);
 
-sonicClass Sonic;
-maps _Maps;
 
 gameEngine::gameEngine(){
 
@@ -14,12 +12,10 @@ gameEngine::~gameEngine(){
 
 }
 
-void gameEngine::init(sonicClass sonic){
+void gameEngine::init(){
 
 
 
-  Sonic.init();
-  _Maps.init();
 
 }
 
@@ -67,20 +63,18 @@ void gameEngine::read_input(Gamepad &pad)
 
 */
 
-void gameEngine::draw(N5110 &lcd){
+void gameEngine::draw(N5110 &lcd, maps &Maps){
 
-  _Maps.drawMap(lcd);
+  Maps.drawMap(lcd);
+
 
 }
 
-void gameEngine::update(sonicClass sonic, maps &Maps){
+void gameEngine::update(sonicClass &sonic, maps &Maps){
 
-
- Sonic.update(joystick_dir, joystick_mag, Maps);
- Maps.updateMap();
-
-
-
+  sonic.update(joystick_dir, joystick_mag);
+  sonic_player_x = sonic.getPlayerPos();
+  Maps.updateMap(sonic_player_x, sonic_player_y);
 
 }
 
