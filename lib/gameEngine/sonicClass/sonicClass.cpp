@@ -35,8 +35,8 @@ void sonicClass::draw(N5110 &lcd){
 
 void sonicClass::update(Direction joystick_dir, float joystick_mag){
 
-  speed = (joystick_mag/5);
-  printf("speed = %f\n\n", speed);
+  speedFloat = (joystick_mag/2); //divisor sets speed, can be changed
+  printf("speed = %f\n\n", speedFloat);
   printf("mag = %f\n\n", joystick_mag);
 
   //call running function if analogue stick moved
@@ -44,18 +44,7 @@ void sonicClass::update(Direction joystick_dir, float joystick_mag){
     running(joystick_dir,joystick_mag);
   }
 
-  //other movement functions....
-
-  //update position within array
-  // if(player_x > 0){
-  //   //map1_data[8][player_x - 1] = 0;
-  //
-  // }
-  //map1_data[8][player_x] = 4;
-  //updateCamera();
-
 }
-
 
 
 int sonicClass::getPlayerPos(){
@@ -75,12 +64,12 @@ int sonicClass::getPlayerPos(){
 void sonicClass::running(Direction joystick_dir, float joystick_mag){
   //update poisition in map array
   if(joystick_dir == E){
-    speed_x+= speed;
+    speed_x+= speedFloat;
   }
   else if(joystick_dir == W){
-    speed_x-= speed;
+    speed_x-= speedFloat;
   }
 
-  player_x = int(speed_x);
+  player_x = int(speed_x); //in pixels (not to alligned to tiles)
 
 }

@@ -28,6 +28,7 @@ void maps::drawMap(N5110 &lcd){
 
         string symbol = sprites.getSymbol(draw_x, draw_y);
         sprites.drawTile(symbol, 4*draw_x-offset_x, 4*draw_y-offset_y, lcd);
+        sprites.drawSonic( _player_x, _player_y, "stat", lcd);
 
     }
 
@@ -38,17 +39,20 @@ void maps::drawMap(N5110 &lcd){
 
 void maps::updateMap(int player_x, int player_y){
 
-    if (player_x < 21/2){
+    _player_x = player_x;
+    _player_y = 32; //only for now, change to = player_y after
+
+    if (_player_x < 21/2){
       offset_x = 0;
     }
     // else if (player_x > NO_OF_SCREENS_ACROSS*21 - (21 / 2)){
     //   offset_x =  NO_OF_SCREENS_ACROSS*21 - 21;
     // }
     else {
-      offset_x = player_x - (21 / 2);
+      offset_x = 4*_player_x - (21 / 2);
     }
 
-  printf("                                 player x = %i\n\n ", player_x);
+  printf("                                 player x = %i\n\n ", _player_x);
   printf("                                                 offset x = %i\n\n ", offset_x);
 
 }

@@ -30,7 +30,7 @@ private:
 
   void updateArray();
 
-  float speed;
+  float speedFloat;
   float speed_x;
   float speed_y;
   int offset_x;
