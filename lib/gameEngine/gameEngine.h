@@ -15,7 +15,7 @@ public:
       gameEngine();
       ~gameEngine();
 
-      void init();
+      void init(maps &Maps);
       void read_input(Gamepad &pad);
       void draw(N5110 &lcd, maps &Maps);
       void update(sonicClass &sonic, maps &Maps);

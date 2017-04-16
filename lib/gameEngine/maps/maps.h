@@ -4,7 +4,6 @@
 #include <mbed.h>
 #include <N5110.h>
 #include <Bitmap.h>
-#include <mapData/mapData.h>
 #include <gameObjects/gameObjects.h>
 
 
@@ -25,6 +24,9 @@ using namespace std;
 #define TILES_DOWN_MAP 12
 
 #define NO_OF_SPRITES 4
+
+#define NO_OF_SCREENS_ACROSS 2
+#define NO_OF_SCREENS_DOWN 1
 
 class maps
 {

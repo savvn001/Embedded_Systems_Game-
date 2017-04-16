@@ -7,7 +7,7 @@
 //#include <gameObjects/graphics.h>
 //#include <SDFileSystem.h>
 
-
+//type this into cmd to push to github: git push --set-upstream Main master
 
 
 
@@ -65,7 +65,7 @@ void init_K64F(){
   lcd.normalMode();      // normal colour mode
   lcd.setBrightness(0.5); // put LED backlight on 50%
 
-  engine.init();
+  engine.init(Maps);
 
 }
 

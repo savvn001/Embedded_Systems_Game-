@@ -12,8 +12,9 @@ gameEngine::~gameEngine(){
 
 }
 
-void gameEngine::init(){
+void gameEngine::init(maps &Maps){
 
+  Maps.init();
 
 
 
