@@ -35,7 +35,6 @@ private:
 
   void init();
   void drawTile(string spriteSymbol, int xpos, int ypos, N5110 &lcd);
-  void drawSonic(int player_x, int player_y, string spriteState, N5110 &lcd);
   string getSymbol(int x, int y);
 
   //Map arrays
@@ -44,8 +43,7 @@ private:
 
   static string map1_data[12][42];
 
-  //Sonic spriteset
-  static int sonic_stationary[];
+
 
   //Map objects
   static int air[];

@@ -15,9 +15,9 @@ public:
       gameEngine();
       ~gameEngine();
 
-      void init(maps &Maps);
+      void init(maps &Maps, sonicClass &sonic);
       void read_input(Gamepad &pad);
-      void draw(N5110 &lcd, maps &Maps);
+      void draw(N5110 &lcd, maps &Maps, sonicClass &sonic);
       void update(sonicClass &sonic, maps &Maps);
 
       bool pad_A;
@@ -35,9 +35,6 @@ private:
 
   int sonic_player_x;
   int sonic_player_y;
-
-
-
 
 };
 

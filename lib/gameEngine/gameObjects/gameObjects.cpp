@@ -59,40 +59,6 @@ string gameObjects::map1_2[12][21] = {
 
 string gameObjects::map1_data[NO_OF_SCREENS_DOWN*12][NO_OF_SCREENS_ACROSS*21] = {};
 
-////////////////////////////////************Sonic's sprite set*************///////////////////////////////////////
-
-static int sonic_stationary[] = {
-
-  0,1,1,1,1,1,0,0,
-  0,0,0,1,1,0,1,0,
-  0,0,1,1,0,0,1,0,
-  0,1,1,1,0,1,0,0,
-  0,0,0,1,1,1,0,0,
-  0,0,0,0,1,1,1,0,
-  0,0,0,1,0,1,0,0,
-  0,0,1,1,1,1,1,1,
-
-};
-
-struct _sonicSpriteSet{
-
-    string state;
-    int *array;
-    int rows;
-    int columns;
-
-  };
-
-
-_sonicSpriteSet sonicSpriteSet [4] = {
-
- {"stat", sonic_stationary, 8, 8},
- {"run1", sonic_stationary, 8, 8},
- {"run2", sonic_stationary, 8, 8},
- {"run3", sonic_stationary, 8, 8},
-
-};
-
 
 
 
@@ -187,7 +153,6 @@ string gameObjects::getSymbol(int x, int y){
 
   return map1_data[y][x];
 
-
 }
 
 
@@ -198,29 +163,9 @@ void gameObjects::drawTile(string spriteSymbol, int xpos, int ypos, N5110 &lcd){
     if((mapSpriteSet+i)->symbol == spriteSymbol){
 
       Bitmap spriteBitmap((mapSpriteSet+i)->array, (mapSpriteSet+i)->rows, (mapSpriteSet+i)->columns);
-      spriteBitmap.render(lcd, xpos, ypos);
+      spriteBitmap.render(lcd, xpos, ypos, false);
       break;
 
     }
-
-
   }
-
-}
-
-void gameObjects::drawSonic(int player_x, int player_y, string spriteState, N5110 &lcd){
-
-  for (int i = 0; i < 4; i++) {
-
-    if((sonicSpriteSet+i)->state == spriteState){
-      //printf("                                                                           state TRUE\n");
-      Bitmap sonic((sonicSpriteSet+i)->array, (sonicSpriteSet+i)->rows , (sonicSpriteSet+i)->columns);
-      sonic.render(lcd, player_x, player_y);
-      break;
-    }
-
-  }
-
-
-
 }

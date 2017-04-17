@@ -50,7 +50,7 @@ int main()
       engine.read_input(pad);
       engine.update(sonic, Maps);
       renderLCD();
-      wait(0.001); //small delay for stability
+      wait(1.0f/60); //small delay, sets frame rate
 
   }
 
@@ -65,14 +65,13 @@ void init_K64F(){
   lcd.normalMode();      // normal colour mode
   lcd.setBrightness(0.5); // put LED backlight on 50%
 
-  engine.init(Maps);
+  engine.init(Maps, sonic);
 
 }
 
 void renderLCD(){
-
   lcd.clear();
-  engine.draw(lcd, Maps);
+  engine.draw(lcd, Maps, sonic);
   lcd.refresh();
 }
 

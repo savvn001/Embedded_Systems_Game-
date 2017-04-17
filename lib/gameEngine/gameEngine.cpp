@@ -12,10 +12,10 @@ gameEngine::~gameEngine(){
 
 }
 
-void gameEngine::init(maps &Maps){
+void gameEngine::init(maps &Maps, sonicClass &sonic){
 
   Maps.init();
-
+  sonic.init();
 
 
 }
@@ -64,9 +64,11 @@ void gameEngine::read_input(Gamepad &pad)
 
 */
 
-void gameEngine::draw(N5110 &lcd, maps &Maps){
+void gameEngine::draw(N5110 &lcd, maps &Maps, sonicClass &sonic){
+
 
   Maps.drawMap(lcd);
+  sonic.draw(lcd);
 
 
 }

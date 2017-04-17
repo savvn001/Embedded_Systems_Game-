@@ -73,14 +73,15 @@ void Bitmap::print() const
  */
 void Bitmap::render(N5110 &lcd,
                     unsigned int const x0,
-                    unsigned int const y0) const
+                    unsigned int const y0, bool mirror) const
 {
+  if(!mirror){
     // Loop through each row of the bitmap image
     for (unsigned int bitmap_row = 0; bitmap_row < _height; ++bitmap_row)
     {
         // Row index on the screen for rendering the row of pixels
         unsigned int screen_row = y0 + bitmap_row;
-                
+
         // Render each pixel in the row
         for (unsigned int bitmap_col = 0; bitmap_col < _width; ++bitmap_col)
         {
@@ -93,4 +94,31 @@ void Bitmap::render(N5110 &lcd,
             else      lcd.clearPixel(screen_col, screen_row);
         }
     }
+
+  }
+  else if(mirror){
+
+    // Loop through each row of the bitmap image
+    for (unsigned int bitmap_row = 0; bitmap_row < _height; ++bitmap_row)
+    {
+        // Row index on the screen for rendering the row of pixels
+        unsigned int screen_row = y0 + bitmap_row;
+
+        // Render each pixel in the row
+        for (unsigned int bitmap_col = 0; bitmap_col < _width; ++bitmap_col)
+        {
+            // Column index on the screen for rendering this pixel
+            // Modified to increment backwards, will draw sprite mirrored across x axis
+            int screen_col = (x0 + _width) - bitmap_col;
+
+            int pixel = get_pixel(bitmap_row, bitmap_col);
+
+            if(pixel) lcd.setPixel(screen_col, screen_row);
+            else      lcd.clearPixel(screen_col, screen_row);
+        }
+    }
+
+
+  }
+
 }

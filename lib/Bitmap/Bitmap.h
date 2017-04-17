@@ -59,7 +59,7 @@ public:
 
     void render(N5110 &lcd,
                 unsigned int const x0,
-                unsigned int const y0) const;
+                unsigned int const y0, bool mirror) const;
 };
 
 #endif // BITMAP_H
