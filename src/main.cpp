@@ -47,7 +47,7 @@ int main()
   //read input > update game state >  render display
   while(1){
 
-      engine.read_input(pad);
+      engine.read_input(pad, sonic);
       engine.update(sonic, Maps);
       renderLCD();
       wait(1.0f/60); //small delay, sets frame rate
@@ -65,7 +65,7 @@ void init_K64F(){
   lcd.normalMode();      // normal colour mode
   lcd.setBrightness(0.5); // put LED backlight on 50%
 
-  engine.init(Maps, sonic);
+  engine.init(Maps, sonic, pad);
 
 }
 

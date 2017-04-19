@@ -15,8 +15,8 @@ public:
       gameEngine();
       ~gameEngine();
 
-      void init(maps &Maps, sonicClass &sonic);
-      void read_input(Gamepad &pad);
+      void init(maps &Maps, sonicClass &sonic, Gamepad &pad);
+      void read_input(Gamepad &pad, sonicClass sonic);
       void draw(N5110 &lcd, maps &Maps, sonicClass &sonic);
       void update(sonicClass &sonic, maps &Maps);
 
@@ -26,10 +26,8 @@ public:
       bool pad_Y;
       bool pad_start;
       bool pad_back;
-
       float joystick_mag;
       Direction joystick_dir;
-
 
 private:
 

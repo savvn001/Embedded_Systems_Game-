@@ -115,17 +115,33 @@ _sonicSpriteSet sonicSpriteSet [12] = {
 
 };
 
-void sonicClass::init(){
+void sonicClass::init(Gamepad &pad){
 
-  //initalize sonic's position within the map array
-  //map1_data[8][0] = 4;
   spriteStateOutput_nextState = (sonicSpriteSet+0)->nextState;
   mirror = false;
+
+  player_x = 0;
+  player_y = 28;
+
+  gravity = 0.21875;
+  jump_speed = 0.09375;
+  jumping = false;
+  air_acc =  0.09375;
+
+  ground_acc = 0.5+0.046875;
+  ground_dec = 0.5+1;
+  top_speed = 6;
+}
+
+
+
+
+void sonicClass::getInput(Gamepad &pad){
+
+
 }
 
 void sonicClass::draw(N5110 &lcd){
-
-  player_y = 28; //Delete this after just for testing now
 
   for (int i = 0; i < 12; i++) {
 
@@ -144,12 +160,12 @@ void sonicClass::draw(N5110 &lcd){
 void sonicClass::update(Direction joystick_dir, float joystick_mag){
 
   speedFloat = (joystick_mag/2); //divisor sets speed, can be changed
-  printf("speed = %f\n\n", speedFloat);
-  printf("mag = %f\n\n", joystick_mag);
+  printf("speedFloat  = %f\n\n", joystick_mag);
+
+
 
   running(joystick_dir,joystick_mag);
-  run_animation(joystick_dir, joystick_mag);
-
+  //jump(joystick_dir, joystick_mag);
 }
 
 
@@ -169,38 +185,84 @@ int sonicClass::getPlayerPos(){
 
 
 void sonicClass::running(Direction joystick_dir, float joystick_mag){
-  //update poisition in map array
-  if(joystick_mag > 0){
+  //if(joystick_mag > 0){
+    if (joystick_dir == W)
+        {
+          mirror = true;
+            if (speed_x > 0)
+            {
+                speed_x -= ground_dec;
+            }
+            else if (speed_x > -top_speed)
+            {
+                speed_x -= ground_acc;
+            }
+        }
+        else if (joystick_dir == E)
+      {
+          mirror = false;
+          if (speed_x < 0)
+          {
+              speed_x += ground_dec;
+          }
+          else if (speed_x < top_speed)
+          {
+              speed_x += ground_acc;
+          }
 
-      if(joystick_dir == E){
-        speed_x+= speedFloat;
-        mirror = false;
       }
-      else if(joystick_dir == W){
-        speed_x-= speedFloat;
-        mirror = true;
+      else{
+        speed_x = min(abs(speed_x), ground_acc)*sign(speed_x);
       }
+      player_x += int(speed_x)/4; //divisor sets character speed
+      run_animation(speed_x, player_x);
 
-      player_x = int(speed_x); //in pixels (not to alligned to tiles)
-  }
+printf("                                                                     speed_x = %f\n", speed_x);
+printf("                                                                     player_x = %i\n", player_x);
 }
 
-void sonicClass::run_animation(Direction joystick_dir, float joystick_mag){
-
-  if(joystick_mag > 0){
+void sonicClass::run_animation(float speed_x, int player_x){
+  //when running
+  if(speed_x != 0){
     //checking if speed_x is equal to player_x, every multiple of 2, means animation frame only changes every 2 changes in x position
-    if(player_x % 2 == 0 && player_x == int(speed_x)){
-      animationLoop(0, 12, joystick_dir);
+    if(player_x % 3 == 0){
+      animationLoop(0, 12);
     }
+
   }
-  else{
+  else if (speed_x == 0){
     spriteStateOutput = (sonicSpriteSet+0)->state;
     spriteStateOutput_nextState = (sonicSpriteSet+0)->nextState;
   }
 }
 
+void sonicClass::jump(){
 
-void sonicClass::animationLoop(int i, int i_max, Direction joystick_dir){
+  if(1){
+
+    jumping = true;
+    jump_speed -= gravity;
+    speed_y += jump_speed;
+
+
+    player_y = int(speed_y); //in pixels (not to alligned to tiles)
+
+    }
+}
+
+void sonicClass::fall(){
+
+  //if(collision == false)
+  speed_y+= gravity;
+  player_y -= int(speed_y);
+
+
+}
+
+
+
+
+void sonicClass::animationLoop(int i, int i_max){
 
   for(int i; i < i_max; i++){
       if(spriteStateOutput_nextState == (sonicSpriteSet+i)->state){
@@ -211,5 +273,22 @@ void sonicClass::animationLoop(int i, int i_max, Direction joystick_dir){
       }
 
   }
+
+}
+
+int sonicClass::sign(int value){
+
+  int sgn;
+
+  if(value < 0){
+    sgn = - 1;
+  }
+  else if(value == 0){
+    sgn = 0;
+  }
+  else if(value > 0){
+    sgn = 1;
+  }
+  return sgn;
 
 }

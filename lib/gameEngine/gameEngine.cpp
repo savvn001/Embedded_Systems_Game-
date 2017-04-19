@@ -12,27 +12,30 @@ gameEngine::~gameEngine(){
 
 }
 
-void gameEngine::init(maps &Maps, sonicClass &sonic){
+void gameEngine::init(maps &Maps, sonicClass &sonic, Gamepad &pad){
 
   Maps.init();
-  sonic.init();
+  sonic.init(pad);
 
 
 }
 
 
-void gameEngine::read_input(Gamepad &pad)
+void gameEngine::read_input(Gamepad &pad, sonicClass sonic)
 {
 
-    pad_A = pad.check_event(Gamepad::A_PRESSED);
-    pad_B = pad.check_event(Gamepad::B_PRESSED);
-    pad_X = pad.check_event(Gamepad::X_PRESSED);
-    pad_Y = pad.check_event(Gamepad::Y_PRESSED);
-    pad_back = pad.check_event(Gamepad::BACK_PRESSED);
-    pad_start = pad.check_event(Gamepad::START_PRESSED);
-    joystick_mag = pad.get_mag();
-    joystick_dir = pad.get_direction();
+  pad_A = pad.check_event(Gamepad::A_PRESSED);
+  pad_B = pad.check_event(Gamepad::B_PRESSED);
+  pad_X = pad.check_event(Gamepad::X_PRESSED);
+  pad_Y = pad.check_event(Gamepad::Y_PRESSED);
+  pad_back = pad.check_event(Gamepad::BACK_PRESSED);
+  pad_start = pad.check_event(Gamepad::START_PRESSED);
+  joystick_mag = pad.get_mag();
+  joystick_dir = pad.get_direction();
+  printf("mag = %f\n\n", joystick_mag);
 
+
+    sonic.getInput(pad);
     //Testing buttons with printf
     // if(pad_A){
     //   serial2.printf ("%s \n", "A");
@@ -59,7 +62,7 @@ void gameEngine::read_input(Gamepad &pad)
 
 /*
 
-
+1
 
 
 */

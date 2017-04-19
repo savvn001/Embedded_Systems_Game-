@@ -52,7 +52,4 @@ void maps::updateMap(int player_x, int player_y){
       offset_x = 4*_player_x - (21 / 2);
     }
 
-  printf("                                 player x = %i\n\n ", _player_x);
-  printf("                                                 offset x = %i\n\n ", offset_x);
-
 }
