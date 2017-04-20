@@ -121,7 +121,9 @@ void sonicClass::init(Gamepad &pad){
   mirror = false;
 
   player_x = 0;
-  player_y = 28;
+  player_y = 28; //change after
+  draw_player_x = 0;
+  draw_player_y = 28;
 
   gravity = 0.21875;
   jump_speed = 0.09375;
@@ -143,11 +145,12 @@ void sonicClass::getInput(Gamepad &pad){
 
 void sonicClass::draw(N5110 &lcd){
 
+
   for (int i = 0; i < 12; i++) {
 
     if((sonicSpriteSet+i)->state == spriteStateOutput){
       Bitmap sonic((sonicSpriteSet+i)->array, (sonicSpriteSet+i)->rows , (sonicSpriteSet+i)->columns);
-      sonic.render(lcd, player_x, player_y, mirror);
+      sonic.render(lcd, draw_player_x, draw_player_y, mirror);
       break;
     }
 
@@ -157,15 +160,16 @@ void sonicClass::draw(N5110 &lcd){
 
 
 
-void sonicClass::update(Direction joystick_dir, float joystick_mag){
+void sonicClass::update(Direction joystick_dir, float joystick_mag, bool collision){
 
   speedFloat = (joystick_mag/2); //divisor sets speed, can be changed
-  printf("speedFloat  = %f\n\n", joystick_mag);
+  //printf("speedFloat  = %f\n\n", joystick_mag);
 
 
-
+  setDrawXY();
   running(joystick_dir,joystick_mag);
   //jump(joystick_dir, joystick_mag);
+  collisionCheck(collision);
 }
 
 
@@ -182,6 +186,30 @@ int sonicClass::getPlayerPos(){
 
 
 ////////////////////////////////////Private functions/////////////////////////////////////////////
+
+void sonicClass::setDrawXY(){
+
+  if(player_x < 42){
+    draw_player_x = player_x;
+  }
+  else if(player_x >= 42){
+    draw_player_x = 42;
+  }
+
+
+}
+
+void sonicClass::collisionCheck(bool collision){
+
+  //when collision with solid tile detected
+  if(collision){
+    speed_x = 0; //set speed to 0
+    player_x -= 1; //'bounce' back by 1px, so sonic doesn't stick to wall
+
+  }
+
+
+}
 
 
 void sonicClass::running(Direction joystick_dir, float joystick_mag){
@@ -214,7 +242,7 @@ void sonicClass::running(Direction joystick_dir, float joystick_mag){
       else{
         speed_x = min(abs(speed_x), ground_acc)*sign(speed_x);
       }
-      player_x += int(speed_x)/4; //divisor sets character speed
+      player_x += (int(speed_x)/4); //divisor sets character speed
       run_animation(speed_x, player_x);
 
 printf("                                                                     speed_x = %f\n", speed_x);

@@ -33,7 +33,7 @@ private:
 
   int sonic_player_x;
   int sonic_player_y;
-
+  bool maps_collision;
 };
 
 #endif

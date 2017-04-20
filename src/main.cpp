@@ -46,7 +46,7 @@ int main()
   //Main game loop when in a level
   //read input > update game state >  render display
   while(1){
-
+      lcd.setBrightness(pad.read_pot());
       engine.read_input(pad, sonic);
       engine.update(sonic, Maps);
       renderLCD();

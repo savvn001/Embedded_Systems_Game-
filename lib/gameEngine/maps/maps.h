@@ -9,7 +9,9 @@
 
 #include <stdio.h>
 #include <string>
-#include <iostream>//maybe delate after (just to use cout>> command)
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 
 using namespace std;
 
@@ -41,8 +43,12 @@ public:
   void init();
   void drawMap(N5110 &lcd);
   void updateMap(int player_x, int player_y);
+  bool collisionCheck(int player_x);
 
 private:
+
+  void drawTile(string spriteSymbol, int xpos, int ypos, N5110 &lcd);
+  string getSymbol(int x, int y);
 
   int offset_x;
   int offset_y;
@@ -52,6 +58,28 @@ private:
 
   int toplefttile_x;
   int toplefttile_y;
+
+  //Map arrays
+  static string map1_1[12][21];
+  static string map1_2[12][21];
+
+  static string map1_data[12][42];
+
+
+
+  //Map objects
+  static int air[];
+  static int level1ground[];
+  static int ring[];
+  static int solid_tile[];
+
+  //Collision engine
+  int hitbox_r;
+
+  bool collision;
+  string symbol_coll;
+
+
 
 
 

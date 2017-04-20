@@ -20,14 +20,15 @@ public:
   void init(Gamepad &pad);
   void getInput(Gamepad &pad);
   void draw(N5110 &lcd);
-  void update(Direction joystick_dir, float joystick_mag);
+  void update(Direction joystick_dir, float joystick_mag, bool collision);
 
   int getPlayerPos();
 
 
 private:
 
-
+  void setDrawXY();
+  void collisionCheck(bool collision);
   void running(Direction joystick_dir, float joystick_mag);
   void run_animation(float speed_x, int player_x);
 
@@ -53,11 +54,12 @@ private:
   float speedFloat;
   float speed_x;
   float speed_y;
-  int offset_x;
-  int offset_y;
   int player_x;
   int player_y;
+  int draw_player_x;
+  int draw_player_y;
   int top_speed;
+  bool collision;
 
   float gravity;
   float ground_dec;

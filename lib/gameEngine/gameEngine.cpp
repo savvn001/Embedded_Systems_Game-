@@ -78,7 +78,8 @@ void gameEngine::draw(N5110 &lcd, maps &Maps, sonicClass &sonic){
 
 void gameEngine::update(sonicClass &sonic, maps &Maps){
 
-  sonic.update(joystick_dir, joystick_mag);
+  maps_collision = Maps.collisionCheck(sonic_player_x);
+  sonic.update(joystick_dir, joystick_mag, maps_collision);
   sonic_player_x = sonic.getPlayerPos();
   Maps.updateMap(sonic_player_x, sonic_player_y);
 
