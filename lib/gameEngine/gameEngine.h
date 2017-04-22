@@ -20,20 +20,17 @@ public:
       void draw(N5110 &lcd, maps &Maps, sonicClass &sonic);
       void update(sonicClass &sonic, maps &Maps);
 
-      bool pad_A;
-      bool pad_B;
-      bool pad_X;
-      bool pad_Y;
-      bool pad_start;
-      bool pad_back;
-      float joystick_mag;
-      Direction joystick_dir;
+
 
 private:
 
   int sonic_player_x;
   int sonic_player_y;
-  bool maps_collision;
+
+  int ringCount;
+  int score;
+
+  char maps_collision;
 };
 
 #endif

@@ -24,17 +24,6 @@ void gameEngine::init(maps &Maps, sonicClass &sonic, Gamepad &pad){
 void gameEngine::read_input(Gamepad &pad, sonicClass sonic)
 {
 
-  pad_A = pad.check_event(Gamepad::A_PRESSED);
-  pad_B = pad.check_event(Gamepad::B_PRESSED);
-  pad_X = pad.check_event(Gamepad::X_PRESSED);
-  pad_Y = pad.check_event(Gamepad::Y_PRESSED);
-  pad_back = pad.check_event(Gamepad::BACK_PRESSED);
-  pad_start = pad.check_event(Gamepad::START_PRESSED);
-  joystick_mag = pad.get_mag();
-  joystick_dir = pad.get_direction();
-  printf("mag = %f\n\n", joystick_mag);
-
-
     sonic.getInput(pad);
     //Testing buttons with printf
     // if(pad_A){
@@ -69,24 +58,22 @@ void gameEngine::read_input(Gamepad &pad, sonicClass sonic)
 
 void gameEngine::draw(N5110 &lcd, maps &Maps, sonicClass &sonic){
 
-
-  Maps.drawMap(lcd);
-  sonic.draw(lcd);
-
+  //
+  // Maps.drawMap(lcd);
+  // sonic.draw(lcd);
 
 }
 
 void gameEngine::update(sonicClass &sonic, maps &Maps){
 
-  maps_collision = Maps.collisionCheck(sonic_player_x);
-  sonic.update(joystick_dir, joystick_mag, maps_collision);
-  sonic_player_x = sonic.getPlayerPos();
-  Maps.updateMap(sonic_player_x, sonic_player_y);
+  // maps_collision = Maps.collisionCheck(sonic_player_x, sonic_player_y);
+  // sonic.collisionCheck(maps_collision);
+  // sonic.update(joystick_dir, joystick_mag, pad_A);
+  // sonic_player_x = sonic.getPlayerX();
+  // sonic_player_y = sonic.getPlayerY();
+  // Maps.updateMap(sonic_player_x, sonic_player_y);
 
 }
-
-
-
 
 
 /////////////////private functions/////////////////////

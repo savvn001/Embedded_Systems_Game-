@@ -6,11 +6,19 @@
 #include <Bitmap.h>
 #include <Gamepad.h>
 #include <cmath>
+#include <vector>
+
 
 class sonicClass
 {
 
-
+public:
+  enum sonic_state{
+    STAND,
+    RUN_LEFT,
+    RUN_RIGHT,
+    JUMP,
+  };
 
 public:
 
@@ -20,19 +28,23 @@ public:
   void init(Gamepad &pad);
   void getInput(Gamepad &pad);
   void draw(N5110 &lcd);
-  void update(Direction joystick_dir, float joystick_mag, bool collision);
+  void update(Direction joystick_dir, float joystick_mag, bool pad_A);
+  void collisionCheck(char collision);
 
-  int getPlayerPos();
-
+  int getPlayerX();
+  int getPlayerY();
 
 private:
 
-  void setDrawXY();
-  void collisionCheck(bool collision);
+
+
+
+  void camera();
+
   void running(Direction joystick_dir, float joystick_mag);
   void run_animation(float speed_x, int player_x);
 
-  void jump();
+  void jump(bool pad_A);
   void fall();
 
   void animationLoop(int i, int i_max);
@@ -41,25 +53,30 @@ private:
 
   int sign(int value);
   //gamepad inputs
-  bool  _pad_A;
-  bool  _pad_B;
-  bool  _pad_X;
-  bool  _pad_Y;
-  bool  _pad_back;
-  bool  _pad_start;
-  float  _joystick_mag;
-  Direction  _joystick_dir;
+  bool pad_A;
+  bool pad_B;
+  bool pad_X;
+  bool pad_Y;
+  bool pad_start;
+  bool pad_back;
+  float joystick_mag;
+  Direction joystick_dir;
 
   //game mechanics variables
   float speedFloat;
-  float speed_x;
-  float speed_y;
+  float vel_x;
+  float vel_y;
   int player_x;
   int player_y;
   int draw_player_x;
   int draw_player_y;
-  int top_speed;
-  bool collision;
+  vector<float> sonicDirection;
+  int top_vel;
+
+  bool collision_right;
+  bool collision_left;
+  bool collision_top;
+  bool collision_bottom;
 
   float gravity;
   float ground_dec;
@@ -87,6 +104,9 @@ private:
 
   string spriteStateOutput_nextState;
   bool mirror;
+
+  sonic_state currentState;
+
 
 };
 

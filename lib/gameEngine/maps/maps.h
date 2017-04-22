@@ -4,14 +4,12 @@
 #include <mbed.h>
 #include <N5110.h>
 #include <Bitmap.h>
-#include <gameObjects/gameObjects.h>
-
-
 #include <stdio.h>
 #include <string>
 #include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <math.h>
 
 using namespace std;
 
@@ -43,12 +41,12 @@ public:
   void init();
   void drawMap(N5110 &lcd);
   void updateMap(int player_x, int player_y);
-  bool collisionCheck(int player_x);
+  char collisionCheck(int player_x, int player_y);
 
 private:
 
-  void drawTile(string spriteSymbol, int xpos, int ypos, N5110 &lcd);
-  string getSymbol(int x, int y);
+  void drawTile(char spriteSymbol, int xpos, int ypos, N5110 &lcd);
+  char getSymbol(int x, int y);
 
   int offset_x;
   int offset_y;
@@ -60,10 +58,10 @@ private:
   int toplefttile_y;
 
   //Map arrays
-  static string map1_1[12][21];
-  static string map1_2[12][21];
+  static char map1_1[12][21];
+  static char map1_2[12][21];
 
-  static string map1_data[12][42];
+  static char map1_data[12][42];
 
 
 
@@ -74,11 +72,15 @@ private:
   static int solid_tile[];
 
   //Collision engine
-  int hitbox_r;
+  bool tileCheck(int index_x, int index_y);
+  int hitbox_left;
+  int hitbox_right;
+  int hitbox_top;
+  int hitbox_bttm;
 
-  bool collision;
-  string symbol_coll;
-
+  bool collision_x;
+  bool collision_y;
+  char collision_id;
 
 
 
