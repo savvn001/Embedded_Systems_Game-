@@ -92,7 +92,7 @@ struct _sonicSpriteSet{
     int *array;
     int rows;
     int columns;
-    int Joystick_Direction; //delay time until next sprite in animation
+    int Joystick_Direction;
 
     string nextState;
 
@@ -154,6 +154,7 @@ void sonicClass::getInput(Gamepad &pad){
   joystick_mag = pad.get_mag();
   joystick_dir = pad.get_direction();
 
+
 }
 
 void sonicClass::draw(N5110 &lcd){
@@ -173,7 +174,7 @@ void sonicClass::draw(N5110 &lcd){
 
 
 
-void sonicClass::update(Direction joystick_dir, float joystick_mag, bool pad_A){
+void sonicClass::update(){
 
   //velFloat = (joystick_mag/2); //divisor sets vel, can be changed
   player_x += int(vel_x)/4; //divisor scales character velocity
@@ -186,12 +187,12 @@ void sonicClass::update(Direction joystick_dir, float joystick_mag, bool pad_A){
   if(player_y < 0){
     player_y = 0;
   }
-  
+
   camera();
   //Movement functions
-  running(joystick_dir,joystick_mag);
-  jump(pad_A);
-
+  running();
+  jump();
+printf("%f\n", joystick_mag);
   printf("                                                                     vel_x = %f\n", vel_x);
   printf("                                                                     player_x = %i\n", player_x);
   printf("                                                                     player_y = %i\n", player_y);
@@ -213,17 +214,17 @@ return player_y;
 
 void sonicClass::collisionCheck(char collision){
 
-  switch (collision) {
-
-    case 'r': //collision right
-    vel_x = 0; //set vel to 0
-    player_x -= 1; //'bounce' back by 1px, so sonic doesn't stick to wall
-
-    case 'b': //collision underneath
-
-    vel_y = 0;
-    // player_y -= 1;
-  }
+  // switch (collision) {
+  //
+  //   case 'r': //collision right
+  //   vel_x = 0; //set vel to 0
+  //   player_x -= 1; //'bounce' back by 1px, so sonic doesn't stick to wall
+  //
+  //   case 'b': //collision underneath
+  //
+  //   vel_y = 0;
+  //   // player_y -= 1;
+  //  }
 
 }
 
@@ -247,7 +248,7 @@ void sonicClass::camera(){
 
 
 
-void sonicClass::running(Direction joystick_dir, float joystick_mag){
+void sonicClass::running(){
   //if(joystick_mag > 0){
     if (joystick_dir == W) //Running left
         {
@@ -287,7 +288,7 @@ void sonicClass::running(Direction joystick_dir, float joystick_mag){
 
 
 
-void sonicClass::jump(bool pad_A){
+void sonicClass::jump(){
 
   if(pad_A){ //when jump button first pressed
     printf("JUMP\n" );

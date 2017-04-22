@@ -290,7 +290,7 @@ Vector2D Gamepad::get_coord()
     return coord;
 }
 
-// This maps the raw x,y coord onto a circular grid.
+// This level the raw x,y coord onto a circular grid.
 // See:  http://mathproofs.blogspot.co.uk/2005/07/mapping-square-to-circle.html
 Vector2D Gamepad::get_mapped_coord()
 {

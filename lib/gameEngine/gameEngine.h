@@ -6,7 +6,7 @@
 #include <Bitmap.h>
 #include <Gamepad.h>
 #include <sonicClass/sonicClass.h>
-#include <maps/maps.h>
+#include <levels/ghzone/ghzone.h>
 
 class gameEngine{
 
@@ -15,10 +15,10 @@ public:
       gameEngine();
       ~gameEngine();
 
-      void init(maps &Maps, sonicClass &sonic, Gamepad &pad);
+      void init(ghzone &level, sonicClass &sonic, Gamepad &pad);
       void read_input(Gamepad &pad, sonicClass sonic);
-      void draw(N5110 &lcd, maps &Maps, sonicClass &sonic);
-      void update(sonicClass &sonic, maps &Maps);
+      void draw(N5110 &lcd, ghzone &level, sonicClass &sonic);
+      void update(sonicClass &sonic, ghzone &level);
 
 
 
@@ -30,7 +30,24 @@ private:
   int ringCount;
   int score;
 
-  char maps_collision;
+  char level_collision;
+
+
+  //Collision engine
+  void collisionCheck();
+  void tileCheck();
+  
+  int hitbox_left;
+  int hitbox_right;
+  int hitbox_top;
+  int hitbox_bottom;
+
+  bool collision_right;
+  bool collision_left;
+  bool collision_top;
+  bool collision_bottom;
+  char collision_id;
+
 };
 
 #endif

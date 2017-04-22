@@ -28,7 +28,7 @@ public:
   void init(Gamepad &pad);
   void getInput(Gamepad &pad);
   void draw(N5110 &lcd);
-  void update(Direction joystick_dir, float joystick_mag, bool pad_A);
+  void update();
   void collisionCheck(char collision);
 
   int getPlayerX();
@@ -41,10 +41,10 @@ private:
 
   void camera();
 
-  void running(Direction joystick_dir, float joystick_mag);
+  void running();
   void run_animation(float speed_x, int player_x);
 
-  void jump(bool pad_A);
+  void jump();
   void fall();
 
   void animationLoop(int i, int i_max);

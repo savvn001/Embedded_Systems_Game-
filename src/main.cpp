@@ -19,7 +19,7 @@ gameEngine engine;
 Serial serial(USBTX, USBRX);  // for debugging to PC
 gameMenu menu;
 sonicClass sonic;
-maps Maps;
+ghzone level;
 
 ////////////Prototypes//////////////
 
@@ -48,7 +48,7 @@ int main()
   while(1){
       lcd.setBrightness(pad.read_pot());
       engine.read_input(pad, sonic);
-      engine.update(sonic, Maps);
+      engine.update(sonic, level);
       renderLCD();
       wait(1.0f/60); //small delay, sets frame rate
 
@@ -65,13 +65,13 @@ void init_K64F(){
   lcd.normalMode();      // normal colour mode
   lcd.setBrightness(0.5); // put LED backlight on 50%
 
-  engine.init(Maps, sonic, pad);
+  engine.init(level, sonic, pad);
 
 }
 
 void renderLCD(){
   lcd.clear();
-  engine.draw(lcd, Maps, sonic);
+  engine.draw(lcd, level, sonic);
   lcd.refresh();
 }
 
