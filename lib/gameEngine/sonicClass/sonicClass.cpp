@@ -115,6 +115,15 @@ _sonicSpriteSet sonicSpriteSet [12] = {
 
 };
 
+//gamepad inputs
+ bool pad_A;
+ bool pad_B;
+ bool pad_X;
+ bool pad_Y;
+ bool pad_start;
+ bool pad_back;
+ float joystick_mag;
+ Direction joystick_dir;
 
 
 
@@ -123,8 +132,7 @@ void sonicClass::init(Gamepad &pad){
   spriteStateOutput_nextState = (sonicSpriteSet+0)->nextState;
   mirror = false;
 
-  player_x = 4;
-  player_y = 28; //change after
+
   draw_player_x = 0;
   draw_player_y = 28;
 
@@ -138,9 +146,8 @@ void sonicClass::init(Gamepad &pad){
   ground_acc = 0.5+0.046875;
   ground_dec = 0.5+1;
   top_vel = 6;
+
 }
-
-
 
 
 void sonicClass::getInput(Gamepad &pad){
@@ -159,7 +166,6 @@ void sonicClass::getInput(Gamepad &pad){
 
 void sonicClass::draw(N5110 &lcd){
 
-
   for (int i = 0; i < 12; i++) {
 
     if((sonicSpriteSet+i)->state == spriteStateOutput){
@@ -174,7 +180,10 @@ void sonicClass::draw(N5110 &lcd){
 
 
 
-void sonicClass::update(){
+void sonicClass::update(int _player_x, int _player_y){
+
+  player_x = _player_x;
+  player_y = _player_y;
 
   //velFloat = (joystick_mag/2); //divisor sets vel, can be changed
   player_x += int(vel_x)/4; //divisor scales character velocity
@@ -192,7 +201,7 @@ void sonicClass::update(){
   //Movement functions
   running();
   jump();
-printf("%f\n", joystick_mag);
+
   printf("                                                                     vel_x = %f\n", vel_x);
   printf("                                                                     player_x = %i\n", player_x);
   printf("                                                                     player_y = %i\n", player_y);
@@ -214,18 +223,7 @@ return player_y;
 
 void sonicClass::collisionCheck(char collision){
 
-  // switch (collision) {
-  //
-  //   case 'r': //collision right
-  //   vel_x = 0; //set vel to 0
-  //   player_x -= 1; //'bounce' back by 1px, so sonic doesn't stick to wall
-  //
-  //   case 'b': //collision underneath
-  //
-  //   vel_y = 0;
-  //   // player_y -= 1;
-  //  }
-
+  
 }
 
 
@@ -249,7 +247,9 @@ void sonicClass::camera(){
 
 
 void sonicClass::running(){
-  //if(joystick_mag > 0){
+
+printf("%f\n", joystick_mag);
+
     if (joystick_dir == W) //Running left
         {
           mirror = true;

@@ -27,6 +27,10 @@ private:
   int sonic_player_x;
   int sonic_player_y;
 
+  int last_sonic_player_x;
+  int last_sonic_player_y;
+
+
   int ringCount;
   int score;
 
@@ -34,9 +38,10 @@ private:
 
 
   //Collision engine
-  void collisionCheck();
-  void tileCheck();
-  
+  void collisionCheck(int sonic_player_x, int sonic_player_y, ghzone &level);
+  bool checkTiles(int boxleft, int boxright, int boxtop, int boxbottom, ghzone &level);
+  void collisionAction();
+
   int hitbox_left;
   int hitbox_right;
   int hitbox_top;

@@ -28,11 +28,12 @@ public:
   void init(Gamepad &pad);
   void getInput(Gamepad &pad);
   void draw(N5110 &lcd);
-  void update();
+  void update(int player_x, int player_y);
   void collisionCheck(char collision);
 
   int getPlayerX();
   int getPlayerY();
+
 
 private:
 
@@ -52,15 +53,7 @@ private:
   void updateArray();
 
   int sign(int value);
-  //gamepad inputs
-  bool pad_A;
-  bool pad_B;
-  bool pad_X;
-  bool pad_Y;
-  bool pad_start;
-  bool pad_back;
-  float joystick_mag;
-  Direction joystick_dir;
+
 
   //game mechanics variables
   float speedFloat;
