@@ -77,40 +77,67 @@ void gameEngine::update(sonicClass &sonic, ghzone &level){
   sonic_player_x = sonic.getPlayerX();
   sonic_player_y = sonic.getPlayerY();
 
-  collisionCheck(sonic_player_x, sonic_player_y, level);
+  collisionCheck(level);
 
   level.updateMap(sonic_player_x, sonic_player_y); //Offset camera, fix later
-
 }
 
+//private
 
-void gameEngine::collisionCheck(int sonic_player_x, int sonic_player_y, ghzone &level){
+void gameEngine::collisionCheck(ghzone &level){
 
-  for (int i = 0; i < 2; i++) {
+    //check for collisions across X
+    bool collision_x = false;
 
-    int rightEdge = sonic_player_x+10;
-    int bottomEdge = sonic_player_y+10;
-    int leftEdge = sonic_player_x+2;
-    int topEdge = sonic_player_y+1;
+    for (int x_start = last_sonic_player_x; x_start < sonic_player_x; x_start++) {
 
-    int hitbox_left = (leftEdge -= leftEdge % 4)/4; //X
-    int hitbox_right = (rightEdge -= rightEdge % 4)/4; //X
-    int hitbox_top = (topEdge -= topEdge % 4)/4; //Y
-    int hitbox_bttm = (bottomEdge -= bottomEdge % 4)/4; //Y
+      int rightEdge = x_start+12;
+      int leftEdge = x_start+1;
 
-    //check for collision
-    bool collision = checkTiles(hitbox_left, hitbox_right, hitbox_top, hitbox_bttm, level);
+      int topEdge = sonic_player_y+1;
+      int bottomEdge = sonic_player_y+10;
 
-    //First set X position to value before collision
-    if(collision && i == 0){
-      sonic_player_x = last_sonic_player_x;
+      int hitbox_left = (leftEdge -= leftEdge % 4)/4; //X
+      int hitbox_right = (rightEdge -= rightEdge % 4)/4; //X
+
+      int hitbox_top = (topEdge -= topEdge % 4)/4; //Y
+      int hitbox_bttm = (bottomEdge -= bottomEdge % 4)/4; //Y
+
+      collision_x = checkTiles(hitbox_left, hitbox_right, hitbox_top, hitbox_bttm, level);
+
+      //When collision with solid tile detected
+      if(collision_x){
+        sonic_player_x = x_start;
+        break;
+      }
     }
-    //Come back into loop, if there's still a collision, set Y value to value before collision
-    if(collision && i == 1){
-      sonic_player_y = last_sonic_player_y;
+
+    bool collision_y = false;
+
+    for (int y_start = last_sonic_player_y; y_start < sonic_player_y; y_start++) {
+
+      int rightEdge = sonic_player_x+12;
+      int leftEdge = sonic_player_x+1;
+
+      int topEdge = y_start+1;
+      int bottomEdge = y_start+10;
+
+      int hitbox_left = (leftEdge -= leftEdge % 4)/4; //X
+      int hitbox_right = (rightEdge -= rightEdge % 4)/4; //X
+
+      int hitbox_top = (topEdge -= topEdge % 4)/4; //Y
+      int hitbox_bttm = (bottomEdge -= bottomEdge % 4)/4; //Y
+
+      collision_y = checkTiles(hitbox_left, hitbox_right, hitbox_top, hitbox_bttm, level);
+
+      //When collision with solid tile detected
+      if(collision_y){
+        sonic_player_y = y_start;
+        break;
+      }
     }
 
-  }
+
 
 }
 

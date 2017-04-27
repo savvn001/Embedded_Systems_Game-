@@ -132,7 +132,6 @@ void sonicClass::init(Gamepad &pad){
   spriteStateOutput_nextState = (sonicSpriteSet+0)->nextState;
   mirror = false;
 
-
   draw_player_x = 0;
   draw_player_y = 28;
 
@@ -147,6 +146,7 @@ void sonicClass::init(Gamepad &pad){
   ground_dec = 0.5+1;
   top_vel = 6;
 
+  currentState = STAND;
 }
 
 
@@ -160,6 +160,7 @@ void sonicClass::getInput(Gamepad &pad){
   pad_start = pad.check_event(Gamepad::START_PRESSED);
   joystick_mag = pad.get_mag();
   joystick_dir = pad.get_direction();
+
 
 
 }
@@ -186,7 +187,7 @@ void sonicClass::update(int _player_x, int _player_y){
   player_y = _player_y;
 
   //velFloat = (joystick_mag/2); //divisor sets vel, can be changed
-  player_x += int(vel_x)/4; //divisor scales character velocity
+  player_x += int(vel_x)/2; //divisor scales character velocity
   player_y += int(vel_y);
 
   //some boundaries for x & y values
@@ -198,9 +199,8 @@ void sonicClass::update(int _player_x, int _player_y){
   }
 
   camera();
-  //Movement functions
-  running();
-  jump();
+  checkCharacterStates();
+
 
   printf("                                                                     vel_x = %f\n", vel_x);
   printf("                                                                     player_x = %i\n", player_x);
@@ -223,7 +223,7 @@ return player_y;
 
 void sonicClass::collisionCheck(char collision){
 
-  
+
 }
 
 
@@ -243,17 +243,58 @@ void sonicClass::camera(){
 
 }
 
+void sonicClass::checkCharacterStates(){
+
+  switch (currentState) {
+
+    case STAND:
+       stationary();
+       if(pad_A){
+         currentState = JUMP;
+       }
+       else if(joystick_mag > 0){
+         currentState = RUN;
+       }
+       break;
+
+     case RUN:
+       running();
+       if(pad_A){
+         currentState = JUMP;
+       }
+       break;
+
+     case JUMP:
+         jump();
+       break;
+
+     case SPINDASH:
+
+       break;
+   }
+
+}
+
+
+
+
+
+void sonicClass::stationary(){
+
+  spriteStateOutput = (sonicSpriteSet+0)->state;
+  spriteStateOutput_nextState = (sonicSpriteSet+0)->nextState;
+
+}
 
 
 
 void sonicClass::running(){
 
-printf("%f\n", joystick_mag);
+    printf("%f\n", joystick_mag);
 
     if (joystick_dir == W) //Running left
         {
           mirror = true;
-          currentState = RUN_LEFT;
             if (vel_x > 0)
             {
                 vel_x -= ground_dec;
@@ -266,7 +307,6 @@ printf("%f\n", joystick_mag);
         else if (joystick_dir == E) //Running right
       {
           mirror = false;
-          currentState = RUN_RIGHT;
           if (vel_x < 0)
           {
               vel_x += ground_dec;
@@ -278,62 +318,34 @@ printf("%f\n", joystick_mag);
 
       }
       else{
+        //When stick released
         vel_x = min(abs(vel_x), ground_acc)*sign(vel_x);
       }
 
-      run_animation(vel_x, player_x);
-
-
+      if(player_x % 4 == 0){
+        animationLoop(0, 12);
+      }
 }
 
 
 
 void sonicClass::jump(){
 
-  if(pad_A){ //when jump button first pressed
-    printf("JUMP\n" );
-    jumping = true; //set jumping flag to true
-    vel_y = -3; //initial jump velocity
-  }
+  printf("JUMP\n" );
+  vel_y = -3; //initial jump velocity
+  vel_y += gravity; //add gravity to vel_y, will cause 'decelleration' to 0,
+                    //then increasing acelleration downwards after top of jump
 
-  if(jumping){ //subsequent motion after pressing button
 
-      vel_y += gravity; //add gravity to vel_y, will cause 'decelleration' to 0, then increasing acelleration downwards after top of jump
-
-      if(vel_y == 3){ //when we get to end of jump
-        jumping = false;
-        vel_y = 0;
-      }
-  }
 }
 
 void sonicClass::fall(){
 
-  // //if(collision == false)
-  // vel_y+= gravity;
-  // player_y -= int(vel_y);
-
+  vel_y+= gravity;
 
 }
 
 ////////////////////////////////////////////Animations/////////////////////////////////////////
-
-void sonicClass::run_animation(float vel_x, int player_x){
-  //when running
-  if(currentState == RUN_LEFT || currentState == RUN_RIGHT){
-    //checking if vel_x is equal to player_x, every multiple of 2, means animation frame only changes every 2 changes in x position
-    if(player_x % 3 == 0){
-      animationLoop(0, 12);
-    }
-
-  }
-  else if (vel_x == 0){
-    spriteStateOutput = (sonicSpriteSet+0)->state;
-    spriteStateOutput_nextState = (sonicSpriteSet+0)->nextState;
-  }
-}
-
-
 
 void sonicClass::animationLoop(int i, int i_max){
 

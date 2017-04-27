@@ -7,6 +7,7 @@
 #include <Gamepad.h>
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 
 class sonicClass
@@ -15,10 +16,11 @@ class sonicClass
 public:
   enum sonic_state{
     STAND,
-    RUN_LEFT,
-    RUN_RIGHT,
+    RUN,
     JUMP,
+    SPINDASH,
   };
+
 
 public:
 
@@ -42,8 +44,11 @@ private:
 
   void camera();
 
+  void checkCharacterStates();
+
+  //Character Movement functions
+  void stationary();
   void running();
-  void run_animation(float speed_x, int player_x);
 
   void jump();
   void fall();
@@ -65,11 +70,6 @@ private:
   int draw_player_y;
   vector<float> sonicDirection;
   int top_vel;
-
-  bool collision_right;
-  bool collision_left;
-  bool collision_top;
-  bool collision_bottom;
 
   float gravity;
   float ground_dec;

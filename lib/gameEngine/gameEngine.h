@@ -38,7 +38,7 @@ private:
 
 
   //Collision engine
-  void collisionCheck(int sonic_player_x, int sonic_player_y, ghzone &level);
+  void collisionCheck(ghzone &level);
   bool checkTiles(int boxleft, int boxright, int boxtop, int boxbottom, ghzone &level);
   void collisionAction();
 
