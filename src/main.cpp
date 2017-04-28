@@ -50,7 +50,7 @@ int main()
       engine.read_input(pad, sonic);
       engine.update(sonic, level);
       renderLCD();
-      wait(1.0f/60); //small delay, sets frame rate
+      wait(1.0f/40); //small delay, sets frame rate
 
   }
 

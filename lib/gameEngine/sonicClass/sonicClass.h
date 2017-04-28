@@ -22,6 +22,7 @@ public:
   };
 
 
+
 public:
 
   sonicClass();
@@ -31,11 +32,11 @@ public:
   void getInput(Gamepad &pad);
   void draw(N5110 &lcd);
   void update(int player_x, int player_y);
-  void collisionCheck(char collision);
+  void handleCollision(bool _collision_top, bool _collision_bottom);
 
   int getPlayerX();
   int getPlayerY();
-
+  bool getDirectionX();
 
 private:
 
@@ -76,8 +77,12 @@ private:
   float jump_speed;
   bool jumping;
   float air_acc;
+  float air_dec;
   float ground_acc;
 
+  bool sonic_x_direction; //1 = right, 0 = left
+  bool collision_top;
+  bool collision_bottom;
   //Sonic spriteset
   static int sonic_stationary[];
 
@@ -99,7 +104,7 @@ private:
   bool mirror;
 
   sonic_state currentState;
-
+  bool collision_y;
 
 };
 

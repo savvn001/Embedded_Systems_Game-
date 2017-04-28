@@ -138,15 +138,17 @@ void sonicClass::init(Gamepad &pad){
   vel_x = 0;
   vel_y = 0;
 
-  gravity = 0.21875;
+  gravity = 0.2;
   jumping = false;
-  air_acc =  0.09375; //X axis acceleration while in air, greater than when on ground
+  air_acc =  0.5+0.06375; //X axis acceleration while in air, greater than when on ground
+  air_dec = 0.5+1;
 
   ground_acc = 0.5+0.046875;
   ground_dec = 0.5+1;
   top_vel = 6;
 
   currentState = STAND;
+  sonic_x_direction = 1;
 }
 
 
@@ -185,7 +187,6 @@ void sonicClass::update(int _player_x, int _player_y){
 
   player_x = _player_x;
   player_y = _player_y;
-
   //velFloat = (joystick_mag/2); //divisor sets vel, can be changed
   player_x += int(vel_x)/2; //divisor scales character velocity
   player_y += int(vel_y);
@@ -202,9 +203,9 @@ void sonicClass::update(int _player_x, int _player_y){
   checkCharacterStates();
 
 
-  printf("                                                                     vel_x = %f\n", vel_x);
-  printf("                                                                     player_x = %i\n", player_x);
-  printf("                                                                     player_y = %i\n", player_y);
+  printf("\t\t\tX VELOCITY = %f\n", vel_x);
+  printf("\t\t\t\tplayer_x = %i\n", player_x);
+  printf("\t\t\t\t\tplayer_y = %i\n", player_y);
 
 }
 
@@ -221,12 +222,23 @@ return player_y;
 
 }
 
-void sonicClass::collisionCheck(char collision){
+bool sonicClass::getDirectionX(){
 
+  return mirror;
 
 }
 
+void sonicClass::handleCollision(bool _collision_top, bool _collision_bottom){
 
+collision_top = _collision_top;
+collision_bottom = _collision_bottom;
+
+if(collision_bottom){
+  vel_y = 0;
+  currentState = STAND;
+}
+
+}
 
 ////////////////////////////////////Private functions/////////////////////////////////////////////
 
@@ -250,6 +262,7 @@ void sonicClass::checkCharacterStates(){
     case STAND:
        stationary();
        if(pad_A){
+         vel_y = -3;
          currentState = JUMP;
        }
        else if(joystick_mag > 0){
@@ -260,7 +273,11 @@ void sonicClass::checkCharacterStates(){
      case RUN:
        running();
        if(pad_A){
+         vel_y = -3;
          currentState = JUMP;
+       }
+       if(collision_bottom == false){
+        fall();
        }
        break;
 
@@ -290,7 +307,7 @@ void sonicClass::stationary(){
 
 void sonicClass::running(){
 
-    printf("%f\n", joystick_mag);
+    //printf("%f\n", joystick_mag);
 
     if (joystick_dir == W) //Running left
         {
@@ -319,7 +336,7 @@ void sonicClass::running(){
       }
       else{
         //When stick released
-        vel_x = min(abs(vel_x), ground_acc)*sign(vel_x);
+        vel_x -= min(abs(vel_x), ground_dec)*sign(vel_x);
       }
 
       if(player_x % 4 == 0){
@@ -331,19 +348,32 @@ void sonicClass::running(){
 
 void sonicClass::jump(){
 
-  printf("JUMP\n" );
-  vel_y = -3; //initial jump velocity
   vel_y += gravity; //add gravity to vel_y, will cause 'decelleration' to 0,
                     //then increasing acelleration downwards after top of jump
 
-
+  if(joystick_dir == E){ //Left and right movement whilst jumping
+    vel_x += air_acc;
+  }
+  else if(joystick_dir == W){
+    vel_x -= air_acc;
+  }
+  else{
+    vel_x -= min(abs(vel_x), air_dec)*sign(vel_x);
+  }
+  printf("\t\tY Velocity = %f\n",vel_y );
 }
+
 
 void sonicClass::fall(){
 
-  vel_y+= gravity;
+    vel_y+= gravity; //Accelerate y velocity
+
+    if(vel_y > 6){ //Limit y velocity to 6
+      vel_y = 6;
+    }
 
 }
+
 
 ////////////////////////////////////////////Animations/////////////////////////////////////////
 
