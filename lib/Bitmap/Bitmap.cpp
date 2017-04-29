@@ -90,8 +90,8 @@ void Bitmap::render(N5110 &lcd,
 
             int pixel = get_pixel(bitmap_row, bitmap_col);
 
-            if(pixel) lcd.setPixel(screen_col, screen_row);
-            else      lcd.clearPixel(screen_col, screen_row);
+            if(pixel == 1) lcd.setPixel(screen_col, screen_row);
+            else if(pixel == 0) lcd.clearPixel(screen_col, screen_row);
         }
     }
 
@@ -113,8 +113,8 @@ void Bitmap::render(N5110 &lcd,
 
             int pixel = get_pixel(bitmap_row, bitmap_col);
 
-            if(pixel) lcd.setPixel(screen_col, screen_row);
-            else      lcd.clearPixel(screen_col, screen_row);
+            if(pixel == 1 ) lcd.setPixel(screen_col, screen_row);
+            else if(pixel == 0)   lcd.clearPixel(screen_col, screen_row);
         }
     }
 

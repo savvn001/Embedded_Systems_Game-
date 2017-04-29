@@ -44,13 +44,13 @@ int main()
   menuScreen();
 
   //Main game loop when in a level
-  //read input > update game state >  render display
+  //read input > update game state > render display
   while(1){
       lcd.setBrightness(pad.read_pot());
       engine.read_input(pad, sonic);
       engine.update(sonic, level);
       renderLCD();
-      wait(1.0f/40); //small delay, sets frame rate
+      wait(1.0f/45); //small delay, sets frame rate
 
   }
 

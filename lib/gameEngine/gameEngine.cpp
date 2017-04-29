@@ -20,6 +20,8 @@ void gameEngine::init(ghzone &level, sonicClass &sonic, Gamepad &pad){
   sonic_player_x = 40;
   sonic_player_y = 28;
 
+  ringCount = 0;
+
 }
 
 
@@ -60,9 +62,19 @@ void gameEngine::read_input(Gamepad &pad, sonicClass sonic)
 
 void gameEngine::draw(N5110 &lcd, ghzone &level, sonicClass &sonic){
 
-
   level.drawMap(lcd);
   sonic.draw(lcd);
+
+  //Converting ring count integer to string using c++ <sstream> lib
+  stringstream convert;
+  convert << ringCount;
+  string s_ringCont = convert.str();
+
+  //In game HUDss
+  lcd.drawCircle(3, 3, 2, 0);
+  lcd.printString("=",8,0);
+  lcd.printString(s_ringCont.c_str(),15,0);
+
 
 }
 
@@ -95,6 +107,9 @@ void gameEngine::collisionCheck(ghzone &level){
     collision_top = false;
     collision_bottom = false;
 
+    collisionTop(level);
+    collisionBottom(level);
+
     switch(direction_x){
 
       case false:
@@ -103,8 +118,7 @@ void gameEngine::collisionCheck(ghzone &level){
         collisionLeft(level);
     }
 
-    collisionTop(level);
-    collisionBottom(level);
+
 
 }
 
@@ -171,8 +185,6 @@ void gameEngine::collisionBottom(ghzone &level){
     }
   }
 
-
-
 }
 
 void gameEngine::collisionTop(ghzone &level){
@@ -194,10 +206,9 @@ void gameEngine::collisionTop(ghzone &level){
       break;
     }
   }
-
-
-
 }
+
+
 bool gameEngine::checkTiles(int boxleft, int boxright, int boxtop, int boxbottom, ghzone &level){
 
   bool collision = false;
@@ -212,8 +223,14 @@ bool gameEngine::checkTiles(int boxleft, int boxright, int boxtop, int boxbottom
         if(level.checkSolid(symbol_check)){
           collision = true;
         }
+
+        switch (symbol_check) {
+          case '*':
+          ringCount++;
+          level.setTile(i, j, ' ');
+        }
+
     }
   }
   return collision;
-
 }

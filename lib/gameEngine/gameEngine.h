@@ -2,6 +2,7 @@
 #define GAMEENGINE_H
 
 #include "mbed.h"
+#include <sstream>
 #include <N5110.h>
 #include <Bitmap.h>
 #include <Gamepad.h>
