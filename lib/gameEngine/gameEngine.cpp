@@ -106,10 +106,7 @@ void gameEngine::collisionCheck(ghzone &level){
     collision_y = false;
     collision_top = false;
     collision_bottom = false;
-
-    collisionTop(level);
-    collisionBottom(level);
-
+    
     switch(direction_x){
 
       case false:
@@ -118,7 +115,8 @@ void gameEngine::collisionCheck(ghzone &level){
         collisionLeft(level);
     }
 
-
+    collisionTop(level);
+    collisionBottom(level);
 
 }
 

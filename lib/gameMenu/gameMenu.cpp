@@ -16,7 +16,7 @@ void gameMenu::drawMenu(N5110 &lcd){
 
     lcd.clear();
     lcd.drawCircle(4, level_selector, 2, 1);
-    lcd.printString(" Level1",7,1);
+    lcd.printString(" Green Hill Zone",7,1);
     lcd.printString(" Level2",7,3); //20 y value
     lcd.printString(" Level3",7,5);
     lcd.refresh();

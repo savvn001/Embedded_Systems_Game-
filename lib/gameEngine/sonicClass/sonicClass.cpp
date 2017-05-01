@@ -210,7 +210,6 @@ void sonicClass::update(int _player_x, int _player_y){
   camera();
   checkCharacterStates();
 
-
   printf("\t\t\tX VELOCITY = %f\n", vel_x);
   printf("\t\t\t\tplayer_x = %i\n", player_x);
   printf("\t\t\t\t\tplayer_y = %i\n", player_y);
@@ -259,7 +258,7 @@ void sonicClass::camera(){
   if(player_x < 42){
     draw_player_x = player_x;
   }
-  else if(player_x >= 42){
+  else if(player_x >= 42){ //Centre sonic in middle of lcd
     draw_player_x = 42;
   }
 
@@ -306,7 +305,6 @@ void sonicClass::checkCharacterStates(){
 
        break;
    }
-
 }
 
 
@@ -389,9 +387,6 @@ void sonicClass::fall(){
     }
 
 }
-
-
-////////////////////////////////////////////Animations/////////////////////////////////////////
 
 void sonicClass::animationLoop(int i, int i_max){
 
