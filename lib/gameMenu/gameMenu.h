@@ -4,6 +4,9 @@
 #include <Gamepad.h>
 
 
+/**
+* @brief Class for game menu, allows user to select level from list.
+*/
 
 
 class gameMenu{
@@ -16,17 +19,4 @@ public:
       void drawMenu(N5110 &lcd);
       void menuInput(Gamepad &pad);
       void loadMap();
-
-
-
-
-
-
-private:
-
-
-
-
-
-
 };

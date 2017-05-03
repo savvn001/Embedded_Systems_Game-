@@ -25,8 +25,8 @@ public:
 
 private:
 
-  int sonic_player_x;
-  int sonic_player_y;
+  int sonic_player_x; ///< player x co ordinate in pixels
+  int sonic_player_y; ///< player y co ordinate in pixels
 
   int last_sonic_player_x;
   int last_sonic_player_y;
@@ -59,7 +59,11 @@ private:
 
   bool collision_x;
   bool collision_y;
-  bool direction_x;
+
+  bool direction_x; ///< Player direction on x axis, 0 = left, 1 = right
+
+  bool ringFX_play;
+  void ringFX(Gamepad &pad);
 };
 
 #endif

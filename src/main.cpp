@@ -4,8 +4,14 @@
 #include <Gamepad.h>
 #include <gameEngine.h>
 #include <gameMenu.h>
+
 //type this into cmd to push to github: git push --set-upstream Main master
 
+/**Main
+@brief Main game loop for program
+
+@author Nicholas Savva
+*/
 static int splashScreenLogo[] = {
 
   0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1,1,1,
@@ -49,6 +55,7 @@ gameMenu menu;
 sonicClass sonic;
 ghzone level;
 
+bool pauseFlag = false;
 ////////////Prototypes//////////////
 
 void init_K64F();
@@ -56,8 +63,9 @@ void renderLCD();
 void splashScreen();
 void splashScreen2();
 void menuScreen();
-
+void pause();
 //////////////Functions//////////////
+
 
 int main()
 {
@@ -74,8 +82,10 @@ int main()
   //Main game loop when in a level
   //read input > update game state > render display
   while(1){
+
       lcd.setBrightness(pad.read_pot());
       engine.read_input(pad, sonic);
+      pause();
       engine.update(sonic, level);
       renderLCD();
       wait(1.0f/45); //small delay, sets frame rate
@@ -133,5 +143,22 @@ void menuScreen(){
   }
   //menu.loadMap();
 
+}
 
+void pause(){
+
+  if(pad.check_event(Gamepad::START_PRESSED) == true){
+    pauseFlag = true;
+    printf("PAUSE\n");
+  }
+
+  while(pauseFlag){
+
+    lcd.drawRect(4, 4, 10, 10, 0);
+    lcd.printString("PAUSE", 42, 5);
+
+    if(pad.check_event(Gamepad::START_PRESSED) == false){
+      pauseFlag = false;
+    }
+  }
 }

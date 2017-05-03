@@ -88,52 +88,55 @@ static int sonic_spin[] = {
 };
 
 
-/////////////////
-
+/* Sonic sprite set
+*
+* struct for holding a finite state machine of sonic's animation sprites.
+*/
 struct _sonicSpriteSet{
 
 
-    string state;
+  string state;
 
-    int *array;
-    int rows;
-    int columns;
-    int Joystick_Direction;
-
-    string nextState;
-
-  };
-
+  int *array; //Pointer to bitmap array
+  int rows;
+  int columns;
+  string nextState;
+};
 
 _sonicSpriteSet sonicSpriteSet [13] = {
 
-  {"stat", sonic_stationary, 12, 12, 0, "walk1"},
-  {"walk1", sonic_walk_1, 12, 12, 0, "walk2"},
-  {"walk2", sonic_walk_2, 12, 12, 0, "walk3"},
-  {"walk3", sonic_walk_3, 12, 12, 0, "walk4"},
-  {"walk4", sonic_walk_4, 12, 12, 0, "walk5"},
-  {"walk5", sonic_walk_5, 12, 12, 0, "walk6"},
-  {"walk6", sonic_walk_6, 12, 12, 0, "walk1"},
-  {"run1",  sonic_run1, 12, 12, 0, "run2"},
-  {"run2",  sonic_run2, 12, 12, 0, "run3"},
-  {"run3",  sonic_run3, 12, 12, 0, "run4"},
-  {"run4",  sonic_run4, 12, 12, 0, "run1"},
-  {"spin1", sonic_spin, 9, 9, 0, "spin1"},
+  {"stat", sonic_stationary, 12, 12,"walk1"},
+  {"walk1", sonic_walk_1, 12, 12, "walk2"},
+  {"walk2", sonic_walk_2, 12, 12, "walk3"},
+  {"walk3", sonic_walk_3, 12, 12, "walk4"},
+  {"walk4", sonic_walk_4, 12, 12, "walk5"},
+  {"walk5", sonic_walk_5, 12, 12, "walk6"},
+  {"walk6", sonic_walk_6, 12, 12, "walk1"},
+  {"run1",  sonic_run1, 12, 12, "run2"},
+  {"run2",  sonic_run2, 12, 12, "run3"},
+  {"run3",  sonic_run3, 12, 12, "run4"},
+  {"run4",  sonic_run4, 12, 12, "run1"},
+  {"spin1", sonic_spin, 9, 9, "spin1"},
 
 };
 
 //gamepad inputs
- bool pad_A;
- bool pad_B;
- bool pad_X;
- bool pad_Y;
- bool pad_start;
- bool pad_back;
- float joystick_mag;
- Direction joystick_dir;
+bool pad_A;
+bool pad_B;
+bool pad_X;
+bool pad_Y;
+bool pad_start;
+bool pad_back;
+float joystick_mag;
+Direction joystick_dir;
 
 
+/////////////////////////////////////// Public functions ////////////////////////////////////////////////////////
 
+/* init
+*
+* Initialises the variables that control sonic's behaviour.
+*/
 void sonicClass::init(Gamepad &pad){
 
   spriteStateOutput_nextState = (sonicSpriteSet+0)->nextState;
@@ -148,12 +151,13 @@ void sonicClass::init(Gamepad &pad){
   gravity = 0.2;
   jumping = false;
 
-  air_acc =  0.5+0.06375; //X axis acceleration while in air, greater than when on ground
-  air_dec = 0.8;
+  air_acc =  0.5+0.06375; //X axis acceleration while in air, slightly greater than when on ground
+  air_dec = 0.8; //Air decelleration
 
-  ground_acc = 0.5;
+  ground_acc = 0.5; //acceleration whilst running
   ground_dec = 0.5+1;
-  top_vel = 6;
+
+  top_vel = 6; //Sonic's maximum velocity
 
   currentState = STAND;
   sonic_x_direction = 1;
@@ -171,35 +175,38 @@ void sonicClass::getInput(Gamepad &pad){
   joystick_mag = pad.get_mag();
   joystick_dir = pad.get_direction();
 
-
-
 }
 
+/* draw
+*
+* Draws sonic with the correct animation sprite
+*/
 void sonicClass::draw(N5110 &lcd){
 
-  for (int i = 0; i < 12; i++) {
+  for (int i = 0; i < 12; i++) { //Itterate through animation FSM
 
     if((sonicSpriteSet+i)->state == spriteStateOutput){
       Bitmap sonic((sonicSpriteSet+i)->array, (sonicSpriteSet+i)->rows , (sonicSpriteSet+i)->columns);
-      sonic.render(lcd, draw_player_x, draw_player_y, mirror);
+      sonic.render(lcd, draw_player_x, draw_player_y, mirror); //Render sonic with correct sprite
       break;
     }
-
   }
-
 }
 
 
-
+/* update
+*
+* updates sonic's x & y positions within the class. Also sets boundaries to prevent going off screen.
+*/
 void sonicClass::update(int _player_x, int _player_y){
 
   player_x = _player_x;
   player_y = _player_y;
-  //velFloat = (joystick_mag/2); //divisor sets vel, can be changed
-  player_x += int(vel_x)/2; //divisor scales character velocity
+
+  player_x += int(vel_x)/2; //divisor scales character velocity.
   player_y += int(vel_y);
 
-  //some boundaries for x & y values
+  //some boundaries for x & y values (prevents going off screen)
   if(player_x < 0){
     player_x = 0;
   }
@@ -210,9 +217,9 @@ void sonicClass::update(int _player_x, int _player_y){
   camera();
   checkCharacterStates();
 
-  printf("\t\t\tX VELOCITY = %f\n", vel_x);
-  printf("\t\t\t\tplayer_x = %i\n", player_x);
-  printf("\t\t\t\t\tplayer_y = %i\n", player_y);
+  //printf("\t\t\tX VELOCITY = %f\n", vel_x);
+  //printf("\t\t\t\tplayer_x = %i\n", player_x);
+  //printf("\t\t\t\t\tplayer_y = %i\n", player_y);
 
 }
 
@@ -220,12 +227,12 @@ void sonicClass::update(int _player_x, int _player_y){
 
 int sonicClass::getPlayerX(){
 
-return player_x;
+  return player_x;
 
 }
 int sonicClass::getPlayerY(){
 
-return player_y;
+  return player_y;
 
 }
 
@@ -235,19 +242,25 @@ bool sonicClass::getDirectionX(){
 
 }
 
+
+
+/* update
+*
+* updates sonic's x & y positions within the class. Also sets boundaries to prevent going off screen.
+*/
 void sonicClass::handleCollision(bool _collision_top, bool _collision_bottom){
 
-collision_top = _collision_top;
-collision_bottom = _collision_bottom;
+  collision_top = _collision_top;
+  collision_bottom = _collision_bottom;
 
-if(collision_bottom){
-  vel_y = 0;
-  currentState = STAND;
-}
-if(collision_top){
+  if(collision_bottom){
+    vel_y = 0;
+    currentState = STAND;
+  }
+  if(collision_top){
 
 
-}
+  }
 
 }
 
@@ -271,40 +284,40 @@ void sonicClass::checkCharacterStates(){
   switch (currentState) {
 
     case STAND:
-       stationary();
-       if(pad_A){
-         vel_y = -3;
-         currentState = JUMP;
-       }
-       else if(joystick_mag > 0){
-         currentState = RUN;
-       }
-       break;
+    stationary();
+    if(pad_A){
+      vel_y = -3;
+      currentState = JUMP;
+    }
+    else if(joystick_mag > 0){
+      currentState = RUN;
+    }
+    break;
 
-     case RUN:
-       running();
-       if(player_x % 2 == 0){
-         animationLoop(1, 6);
-       }
-       if(pad_A){
-         vel_y = -3;
-         currentState = JUMP;
-       }
-       if(collision_bottom == false){
-        fall();
-       }
-       break;
+    case RUN:
+    running();
+    if(player_x % 2 == 0){
+      animationLoop(1, 6);
+    }
+    if(pad_A){
+      vel_y = -3;
+      currentState = JUMP;
+    }
+    if(collision_bottom == false){
+      fall();
+    }
+    break;
 
-     case JUMP:
-        //animationLoop(12, 12);
-        spriteStateOutput = (sonicSpriteSet+11)->state;
-         jump();
-       break;
+    case JUMP:
+    //animationLoop(12, 12);
+    spriteStateOutput = (sonicSpriteSet+11)->state;
+    jump();
+    break;
 
-     case SPINDASH:
+    case SPINDASH:
 
-       break;
-   }
+    break;
+  }
 }
 
 
@@ -322,38 +335,38 @@ void sonicClass::stationary(){
 
 void sonicClass::running(){
 
-    //printf("%f\n", joystick_mag);
+  //printf("%f\n", joystick_mag);
 
-    if (joystick_dir == W) //Running left
-        {
-          mirror = true;
-            if (vel_x > 0)
-            {
-                vel_x -= ground_dec;
-            }
-            else if (vel_x > -top_vel)
-            {
-                vel_x -= ground_acc;
-            }
-        }
-        else if (joystick_dir == E) //Running right
-      {
-          mirror = false;
-          if (vel_x < 0)
-          {
-              vel_x += ground_dec;
-          }
-          else if (vel_x < top_vel)
-          {
-              vel_x += ground_acc;
-          }
+  if (joystick_dir == W) //Running left
+  {
+    mirror = true;
+    if (vel_x > 0)
+    {
+      vel_x -= ground_dec;
+    }
+    else if (vel_x > -top_vel)
+    {
+      vel_x -= ground_acc;
+    }
+  }
+  else if (joystick_dir == E) //Running right
+  {
+    mirror = false;
+    if (vel_x < 0)
+    {
+      vel_x += ground_dec;
+    }
+    else if (vel_x < top_vel)
+    {
+      vel_x += ground_acc;
+    }
 
-      }
-      else if(joystick_mag < 0.2 && joystick_mag > -0.2){
-        //When stick released
-        //vel_x = min(abs(vel_x), ground_dec)*sign(vel_x);
-        vel_x = 0;
-      }
+  }
+  else if(joystick_mag < 0.2 && joystick_mag > -0.2){
+    //When stick released
+    //vel_x = min(abs(vel_x), ground_dec)*sign(vel_x);
+    vel_x = 0;
+  }
 
 
 }
@@ -363,7 +376,7 @@ void sonicClass::running(){
 void sonicClass::jump(){
 
   vel_y += gravity; //add gravity to vel_y, will cause 'decelleration' to 0,
-                    //then increasing acelleration downwards after top of jump
+  //then increasing acelleration downwards after top of jump
 
   if(joystick_dir == E){ //Left and right movement whilst jumping
     vel_x += air_acc;
@@ -380,23 +393,23 @@ void sonicClass::jump(){
 
 void sonicClass::fall(){
 
-    vel_y+= gravity; //Accelerate y velocity
+  vel_y+= gravity; //Accelerate y velocity
 
-    if(vel_y > 6){ //Limit y velocity to 6
-      vel_y = 6;
-    }
+  if(vel_y > 6){ //Limit y velocity to 6
+    vel_y = 6;
+  }
 
 }
 
 void sonicClass::animationLoop(int i, int i_max){
 
   for(int i; i <= i_max; i++){
-      if(spriteStateOutput_nextState == (sonicSpriteSet+i)->state){
+    if(spriteStateOutput_nextState == (sonicSpriteSet+i)->state){
 
-        spriteStateOutput = (sonicSpriteSet+i)->state;
-        spriteStateOutput_nextState = (sonicSpriteSet+i)->nextState;
-        break;
-      }
+      spriteStateOutput = (sonicSpriteSet+i)->state;
+      spriteStateOutput_nextState = (sonicSpriteSet+i)->nextState;
+      break;
+    }
 
   }
 }
